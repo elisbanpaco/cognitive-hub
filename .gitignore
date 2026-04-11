@@ -1,0 +1,15 @@
+# Entornos virtuales
+venv/
+env/
+.env
+
+# Archivos compilados de Python
+__pycache__/
+*.pyc
+
+# Jupyter Notebooks checkpoints
+.ipynb_checkpoints/
+
+# Dependencias de Next.js (para cuando lo agregues)
+node_modules/
+.next/
