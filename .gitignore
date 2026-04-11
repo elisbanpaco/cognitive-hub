@@ -1,15 +1,82 @@
-# Entornos virtuales
+# ========================
+# ENTORNOS VIRTUALES
+# ========================
 venv/
 env/
-.env
+.venv/
+ENV/
 
-# Archivos compilados de Python
+# ========================
+# PYTHON
+# ========================
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 
-# Jupyter Notebooks checkpoints
+# Jupyter
 .ipynb_checkpoints/
+.jupyter/
 
-# Dependencias de Next.js (para cuando lo agregues)
+# ========================
+# NODE / PNPM
+# ========================
 node_modules/
+.pnpm-store/
+
+# Next.js
 .next/
+out/
+
+# ========================
+# IDEs
+# ========================
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ========================
+# ENV (NO commitear archivos reales)
+# ========================
+.env
+.env.local
+.env.example
+
+# PERO sí commitear las plantillas
+!.env.example
+
+# ========================
+# ML / DATA
+# ========================
+*.h5
+*.pkl
+*.pth
+models/
+checkpoints/
+wandb/
+mlruns/
+
+# ========================
+# LOGS
+# ========================
+*.log
+logs/
