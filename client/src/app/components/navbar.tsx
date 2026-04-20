@@ -17,8 +17,6 @@ export default function Navbar() {
               </Link>
               <a className="text-zinc-400 hover:text-white">Analytics</a>
               <a className="text-zinc-400 hover:text-white" href="/AG">Algoritmos Geneticos</a>
-              <a className="text-zinc-400 hover:text-white">Architecture</a>
-              <a className="text-zinc-400 hover:text-white">Security</a>
             </div>
 
             <div className="flex gap-3">
