@@ -1,9 +1,11 @@
 "use client";
 
 import { Brain, TrendingUp, Clock, Layers, Target, Settings, Dna, ChevronLeft, ChevronRight, Cpu } from "lucide-react";
-import { AGResult }  from "../types";
+import { AGResult } from "../types";
+import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from "recharts";
 
 interface DashboardProps {
+  algorithm: string;
   isRunning: boolean;
   result: AGResult | null;
   error: string | null;
@@ -179,7 +181,96 @@ function FinalResult({ result }: { result: AGResult }) {
   );
 }
 
-export default function Dashboard({ isRunning, result, error, historyIndex, setHistoryIndex }: DashboardProps) {
+interface ChartData {
+  generation: number;
+  best_fitness: number;
+  best_overall_fitness: number;
+}
+
+function FitnessChart({ result, algorithm }: { result: AGResult; algorithm: string }) {
+  const chartData: ChartData[] = result.history?.map((step) => ({
+    generation: step.generation,
+    best_fitness: step.best_fitness,
+    best_overall_fitness: step.best_overall_fitness,
+  })) || [];
+
+  if (chartData.length === 0) return null;
+
+  const isFeatureSelection = algorithm === "feature_selection";
+
+  const allValues = chartData.flatMap((d) => [d.best_fitness, d.best_overall_fitness]);
+  const minValue = Math.min(...allValues);
+  const maxValue = Math.max(...allValues);
+  const padding = (maxValue - minValue) * 0.1 || 0.1;
+  const yDomain: [number, number] = [Math.max(0, minValue - padding), maxValue + padding];
+
+  return (
+    <Card title={isFeatureSelection ? "Evolution Progress" : "Fitness Over Generations"} icon={TrendingUp}>
+      <div className="h-64">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+            <defs>
+              <linearGradient id="colorFitness" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#22d3ee" stopOpacity={0.3} />
+                <stop offset="95%" stopColor="#22d3ee" stopOpacity={0} />
+              </linearGradient>
+              <linearGradient id="colorOverall" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#a78bfa" stopOpacity={0.3} />
+                <stop offset="95%" stopColor="#a78bfa" stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" stroke="#3f3f46" vertical={false} />
+            <XAxis
+              dataKey="generation"
+              stroke="#71717a"
+              fontSize={12}
+              tickLine={false}
+              axisLine={false}
+            />
+            <YAxis
+              domain={yDomain}
+              stroke="#71717a"
+              fontSize={12}
+              tickLine={false}
+              axisLine={false}
+              tickFormatter={(value) => value.toFixed(3)}
+            />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: "#18181b",
+                border: "1px solid #3f3f46",
+                borderRadius: "8px",
+                fontSize: "12px",
+              }}
+              labelStyle={{ color: "#a1a1aa" }}
+              itemStyle={{ color: "#22d3ee" }}
+            />
+            <Area
+              type="monotone"
+              dataKey="best_overall_fitness"
+              stroke="#a78bfa"
+              fillOpacity={1}
+              fill="url(#colorOverall)"
+              strokeWidth={2}
+              name="Best Overall"
+            />
+            <Area
+              type="monotone"
+              dataKey="best_fitness"
+              stroke="#22d3ee"
+              fillOpacity={1}
+              fill="url(#colorFitness)"
+              strokeWidth={2}
+              name="Current Best"
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+    </Card>
+  );
+}
+
+export default function Dashboard({ algorithm, isRunning, result, error, historyIndex, setHistoryIndex }: DashboardProps) {
   const history = result?.history || [];
   const maxIndex = history.length - 1;
 
@@ -195,6 +286,7 @@ export default function Dashboard({ isRunning, result, error, historyIndex, setH
           </div>
         )}
       </Card>
+      {result && <FitnessChart result={result} algorithm={algorithm} />}
     </section>
   );
 }
