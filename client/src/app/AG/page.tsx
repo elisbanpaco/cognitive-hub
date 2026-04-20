@@ -33,6 +33,7 @@ export default function AGPage() {
             run={runAlgorithm}
           />
           <Dashboard
+            algorithm={algorithm}
             isRunning={isRunning}
             result={result}
             error={error}
