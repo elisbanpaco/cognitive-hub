@@ -140,16 +140,8 @@ Balance crítico con `TOURNAMENT_SIZE` y `MUTATION_RATE`.
 | **Memoria** | Poblacional (todo) | Individual + Global |
 | **Mezcla** | Cruce (recombinación) | Velocidad (cinética) |
 | **Mutación** | Explícita (requerida) | Implícita (ruido) |
-| **Convergencia** | Más lenta |通常 Más rápida |
+| **Convergencia** | Más lenta | Más rápida |
 
-## Próximos Pasos
-
-Extensiones sugeridas:
-
-- [ ] NSGA-II para optimización multi-objetivo
-- [ ] Covariancia adaptativa (CMA-ES)
-- [ ] Co-evolución (poblaciones múltiples)
-- [ ] Paralelismo island-model
 
 ## Referencias
 
