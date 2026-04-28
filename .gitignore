@@ -12,6 +12,8 @@ ENV/
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyo
+*.pyc
 *.so
 .Python
 build/
@@ -29,6 +31,9 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+.ipynb_checkpoints/
+.DS_Store
+Thumbs.db
 
 # Jupyter
 .ipynb_checkpoints/
