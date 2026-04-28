@@ -97,14 +97,6 @@ Donde:
 | PSO (Weights) | NN Training | Alta |
 | PSO (Clustering) | Unsupervised | Media |
 
-## Próximos Pasos
-
-¿Querés扩展 estos algoritmos? Ideas:
-
-- [ ] Implementar variantes con inercia adaptativa
-- [ ] Agregar topología de vecindad (anillo, estrella)
-- [ ] Hibridizar con algoritmos genéticos
-- [ ] Paralelización con multiprocessing
 
 ## Referencias
 
