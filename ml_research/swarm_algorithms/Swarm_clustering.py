@@ -1,147 +1,146 @@
+import logging
 import numpy as np
-from sklearn.datasets import load_iris
+import pandas as pd
+import matplotlib.pyplot as plt
+from typing import Tuple, List
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
-import matplotlib.pyplot as plt
 from scipy.spatial.distance import cdist
-import warnings
 
-warnings.filterwarnings('ignore')
+# Configuración profesional de logs en lugar de "prints" esparcidos
+logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
 class PSOClustering:
     """
-    Algoritmo PSO aplicado a problemas de Agrupamiento (Clustering).
-    Busca optimizar las coordenadas de K centroides minimizando 
-    la distancia intra-cluster (Suma de Errores Cuadráticos - SSE).
+    Optimización por Enjambre de Partículas (PSO) para Clustering.
+    Optimiza las coordenadas de K centroides minimizando el SSE.
     """
-    def __init__(self, n_clusters, num_particles=20, max_iter=50, w=0.729, c1=1.494, c2=1.494, random_state=42):
+    def __init__(self, n_clusters: int, num_particles: int = 20, max_iter: int = 50, 
+                 w: float = 0.729, c1: float = 1.494, c2: float = 1.494, random_state: int = 42):
         self.n_clusters = n_clusters
         self.num_particles = num_particles
         self.max_iter = max_iter
+        self.w, self.c1, self.c2 = w, c1, c2
+        np.random.seed(random_state)
         
-        # Coeficientes estándar recomendados en la literatura PSO
-        self.w = w
-        self.c1 = c1
-        self.c2 = c2
-        self.random_state = random_state
-        np.random.seed(self.random_state)
-        
-        # Estado
-        self.gbest_position = None
-        self.gbest_fitness = np.inf # Para clustering, buscamos MINIMIZAR el error
-        self.labels_ = None
+        self.gbest_position: np.ndarray = None
+        self.gbest_fitness: float = np.inf
+        self.convergence_history: List[float] = []
 
-    def _calculate_fitness(self, particle_position, X):
-        """
-        [Función de Aptitud]
-        Calcula la métrica de Cuantización del Error (Suma de distancias euclidianas 
-        desde cada punto de X a su centroide más cercano).
-        """
-        # Reconstruir la matriz de centroides (K, D) a partir del vector plano
-        centroids = particle_position.reshape(self.n_clusters, X.shape[1])
-        
-        # cdist calcula la distancia de cada punto a cada centroide
-        distances = cdist(X, centroids, metric='euclidean')
-        
-        # Obtener la distancia mínima para cada punto (al centroide más cercano)
-        min_distances = np.min(distances, axis=1)
-        
-        # La aptitud es la suma de esos errores (buscamos minimizarla)
-        return np.sum(min_distances)
+    def _calculate_fitness(self, position: np.ndarray, X: np.ndarray) -> float:
+        """Calcula el SSE (Suma de Errores Cuadráticos) para un conjunto de centroides."""
+        centroids = position.reshape(self.n_clusters, -1)
+        return cdist(X, centroids, metric='euclidean').min(axis=1).sum()
 
-    def fit(self, X):
+    def fit(self, X: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         n_samples, n_features = X.shape
-        self.particle_dim = self.n_clusters * n_features
+        particle_dim = self.n_clusters * n_features
         
-        # Límites del espacio de búsqueda basados en los datos
-        bounds_min = np.min(X, axis=0)
-        bounds_max = np.max(X, axis=0)
+        # 1. Vectorización de límites (Elimina el doble bucle for del código original)
+        bounds_min = np.tile(X.min(axis=0), self.n_clusters)
+        bounds_max = np.tile(X.max(axis=0), self.n_clusters)
         
-        # [Inicialización del Enjambre]
-        self.positions = np.zeros((self.num_particles, self.particle_dim))
+        # 2. Inicialización limpia de partículas (comprensión de listas)
+        random_indices = [np.random.choice(n_samples, self.n_clusters, replace=False) 
+                          for _ in range(self.num_particles)]
+        self.positions = np.array([X[idx].flatten() for idx in random_indices])
+        self.velocities = np.zeros_like(self.positions)
         
-        # Para evitar óptimos locales (debilidad del PSO según la teoría), 
-        # inicializamos las partículas seleccionando puntos aleatorios reales del dataset
-        for i in range(self.num_particles):
-            random_indices = np.random.choice(n_samples, self.n_clusters, replace=False)
-            initial_centroids = X[random_indices]
-            self.positions[i] = initial_centroids.flatten()
-            
-        # Inicializar velocidades a 0
-        self.velocities = np.zeros((self.num_particles, self.particle_dim))
-        
-        # Memoria cognitiva (pbest)
         self.pbest_positions = self.positions.copy()
         self.pbest_fitness = np.full(self.num_particles, np.inf)
 
-        print(f"Iniciando PSO Clustering para {self.n_clusters} grupos...")
+        logging.info(f"Iniciando PSO Clustering para {self.n_clusters} grupos...")
 
-        # [Evolución del Enjambre]
         for iteration in range(self.max_iter):
-            for i in range(self.num_particles):
-                # 1. Evaluar aptitud
-                fitness = self._calculate_fitness(self.positions[i], X)
-                
-                # 2. Actualizar mejor personal (Buscando el MENOR error)
-                if fitness < self.pbest_fitness[i]:
-                    self.pbest_fitness[i] = fitness
-                    self.pbest_positions[i] = self.positions[i].copy()
-                    
-                    # 3. Actualizar mejor global
-                    if fitness < self.gbest_fitness:
-                        self.gbest_fitness = fitness
-                        self.gbest_position = self.positions[i].copy()
-                        
-            # 4. Cinemática de la partícula (Actualización)
-            r1 = np.random.rand(self.num_particles, self.particle_dim)
-            r2 = np.random.rand(self.num_particles, self.particle_dim)
+            # 3. Evaluación de fitness y actualización de PBest usando máscaras booleanas (vectorizado)
+            fitness = np.array([self._calculate_fitness(p, X) for p in self.positions])
+            
+            better_mask = fitness < self.pbest_fitness
+            self.pbest_fitness[better_mask] = fitness[better_mask]
+            self.pbest_positions[better_mask] = self.positions[better_mask]
+            
+            # 4. Actualización de GBest
+            best_idx = np.argmin(self.pbest_fitness)
+            if self.pbest_fitness[best_idx] < self.gbest_fitness:
+                self.gbest_fitness = self.pbest_fitness[best_idx]
+                self.gbest_position = self.pbest_positions[best_idx].copy()
+            
+            self.convergence_history.append(self.gbest_fitness)
+            
+            # 5. Cálculo de cinemática (100% matricial)
+            r1 = np.random.rand(self.num_particles, particle_dim)
+            r2 = np.random.rand(self.num_particles, particle_dim)
             
             cognitive = self.c1 * r1 * (self.pbest_positions - self.positions)
             social = self.c2 * r2 * (self.gbest_position - self.positions)
             
             self.velocities = (self.w * self.velocities) + cognitive + social
-            self.positions = self.positions + self.velocities
-            
-            # [Restricción] Mantener los centroides dentro del bounding box de los datos
-            for d in range(n_features):
-                # Aplicar límites a cada feature en el vector aplanado
-                for k in range(self.n_clusters):
-                    idx = k * n_features + d
-                    self.positions[:, idx] = np.clip(self.positions[:, idx], bounds_min[d], bounds_max[d])
+            # Clip matricial instantáneo (reemplaza el costoso bucle anidado del código original)
+            self.positions = np.clip(self.positions + self.velocities, bounds_min, bounds_max)
 
             if (iteration + 1) % 10 == 0 or iteration == 0:
-                print(f"Iteración {iteration + 1:03d}/{self.max_iter} | Error Global (SSE): {self.gbest_fitness:.4f}")
+                logging.info(f"Iteración {iteration+1:03d}/{self.max_iter} | Error Global (SSE): {self.gbest_fitness:.4f}")
 
-        # [Finalización]
-        # Calcular las etiquetas finales para cada dato
+        # Retorno final
         best_centroids = self.gbest_position.reshape(self.n_clusters, n_features)
-        distances = cdist(X, best_centroids, metric='euclidean')
-        self.labels_ = np.argmin(distances, axis=1)
-        
-        return best_centroids, self.labels_
+        labels = cdist(X, best_centroids, metric='euclidean').argmin(axis=1)
+        return best_centroids, labels
 
-# ==========================================
-# Ejecución y prueba del algoritmo
-# ==========================================
-if __name__ == "__main__":
-    # Usaremos el dataset Iris (omitiendo las etiquetas reales para hacer clustering ciego)
-    data = load_iris()
-    X = data.data
-    
-    # Escalar datos es fundamental basada en distancias euclidianas
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X)
+ # Vizualizacion
+def plot_convergence(history: List[float]):
+    """Grafica la curva de convergencia."""
+    plt.figure(figsize=(8, 5))
+    plt.plot(range(1, len(history) + 1), history, marker='o', linestyle='-', color='b', markersize=3)
+    plt.title('Curva de Convergencia del PSO')
+    plt.xlabel('Iteración')
+    plt.ylabel('SSE')
+    plt.grid(alpha=0.3)
+    plt.tight_layout()
+    plt.show()
 
-    # 3 especies de flores = 3 clusters
-    n_clusters = 3 
+def plot_pca_clusters(X_scaled: np.ndarray, centroids: np.ndarray, labels: np.ndarray):
+    """Grafica los datos y centroides reducidos a 2D con PCA."""
+    pca = PCA(n_components=2)
+    X_pca = pca.fit_transform(X_scaled)
+    centroids_pca = pca.transform(centroids)
     
-    pso_clustering = PSOClustering(n_clusters=n_clusters, num_particles=30, max_iter=50)
-    best_centroids, labels = pso_clustering.fit(X_scaled)
+    plt.figure(figsize=(10, 7))
+    scatter = plt.scatter(X_pca[:, 0], X_pca[:, 1], c=labels, cmap='viridis', alpha=0.6, s=10)
+    plt.scatter(centroids_pca[:, 0], centroids_pca[:, 1], c='red', marker='*', s=200, 
+                edgecolors='black', label='Centroides')
+    plt.colorbar(scatter, label='Cluster')
+    plt.title(f'PSO Clustering ({len(centroids)} grupos) - Proyección PCA 2D')
+    plt.xlabel('Componente Principal 1')
+    plt.ylabel('Componente Principal 2')
+    plt.legend()
+    plt.grid(alpha=0.3)
+    plt.show()
 
-    print("\n--- Resultados de Finalización ---")
-    print(f"Error Final de Agrupamiento: {pso_clustering.gbest_fitness:.4f}")
+# MAIN PRINCIPAL
+def main():
+    df = pd.read_csv("Patient_Health_Risk.csv")
+
+    X = df.drop(columns=['Class']).values
+    y = df['Class'].values
+    n_clusters = len(np.unique(y))
+    logging.info(f"Detectadas {n_clusters} clases objetivo.")
     
-    # Opcional: Mostrar cuántos elementos quedaron en cada cluster
+    # Preprocesamiento
+    X_scaled = StandardScaler().fit_transform(X)
+    
+    # Modelo y Entrenamiento
+    pso = PSOClustering(n_clusters=n_clusters, num_particles=30, max_iter=50)
+    best_centroids, labels = pso.fit(X_scaled)
+    
+    # Resultados
+    logging.info(f"SSE Final: {pso.gbest_fitness:.4f}")
     unique_labels, counts = np.unique(labels, return_counts=True)
     for label, count in zip(unique_labels, counts):
-        print(f"Cluster {label}: {count} elementos")
+        logging.info(f"Cluster {label}: {count} elementos")
+    
+    # Visualizaciones
+    plot_convergence(pso.convergence_history)
+    plot_pca_clusters(X_scaled, best_centroids, labels)
+
+if __name__ == "__main__":
+    main()
