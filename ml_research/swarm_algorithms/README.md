@@ -22,7 +22,7 @@ Selección automática de características usando el comportamiento de colonies 
 
 **Uso típico:**
 ```bash
-python ABC_feature_selection.py
+uv run python ABC_feature_selection.py
 ```
 
 **Aplicaciones:** Reducción de dimensionalidad, selección de features relevantes.
@@ -37,7 +37,7 @@ python ABC_feature_selection.py
 Búsqueda de hiperparámetros óptimos para SVM (C, gamma, epsilon, tol) usando validación cruzada.
 
 ```bash
-python PSO_hyperparameter_tuning.py
+uv run python PSO_hyperparameter_tuning.py
 ```
 
 | Parámetro | Rango | Descripción |
@@ -53,7 +53,7 @@ python PSO_hyperparameter_tuning.py
 Entrenamiento de redes neuronales sin backpropagation - los pesos se optimizan directamente via PSO usando PySwarms. Resuelve el problema CartPole-v1.
 
 ```bash
-python PSO_NN_training_without_backpropagation.py
+uv run python PSO_NN_training_without_backpropagation.py
 ```
 
 #### 2.3 Clustering
@@ -62,25 +62,31 @@ python PSO_NN_training_without_backpropagation.py
 Agrupamiento no supervisado usando PSO para encontrar K centroides.
 
 ```bash
-python Swarm_clustering.py
+uv run python Swarm_clustering.py
 ```
 
 ---
 
 ## Guía de Uso Rápida
 
+### Prerrequisitos
+- [Python 3.10+](https://www.python.org/)
+- [uv](https://github.com/astral-sh/uv) (instalar con: `curl -LsSf https://astral.sh/uv/install.sh | sh`)
+
+### Ejecución
+
 ```bash
-# Clone el repositorio y navegue al directorio
+# Navegue al directorio del proyecto
 cd swarm_algorithms
 
-# Instale las dependencias
-pip install -r requirements.txt
+# Instale las dependencias (crea .venv automáticamente)
+uv sync
 
-# Ejecute cualquier algoritmo directamente
-python PSO_hyperparameter_tuning.py      # Optimiza hiperparámetros SVM
-python ABC_feature_selection.py         # Selecciona features automáticamente
-python PSO_NN_training_without_backpropagation.py  # Entrena red neuronal
-python Swarm_clustering.py              # Clustering no supervisado
+# Ejecute los algoritmos directamente con uv run
+uv run python PSO_hyperparameter_tuning.py      # Optimiza hiperparámetros SVM
+uv run python ABC_feature_selection.py         # Selecciona features automáticamente
+uv run python PSO_NN_training_without_backpropagation.py  # Entrena red neuronal
+uv run python Swarm_clustering.py              # Clustering no supervisado
 ```
 
 Las dependencias se gestionan en `pyproject.toml`:
