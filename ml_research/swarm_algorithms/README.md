@@ -1,5 +1,10 @@
 # Algoritmos de Enjambre (Swarm Intelligence)
 
+[![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-1.3+-orange.svg)](https://scikit-learn.org/)
+[![NumPy](https://img.shields.io/badge/NumPy-1.24+-013.svg)](https://numpy.org/)
+[![PySwarms](https://img.shields.io/badge/PySwarms-1.3+-green.svg)](https://pyswarms.readthedocs.io/)
+
 Implementaciones de algoritmos metaheurísticos basados en el comportamiento colectivo de sistemas biológicos naturales para problemas de optimización en Machine Learning.
 
 ## Algoritmos Disponibles
@@ -29,19 +34,26 @@ python ABC_feature_selection.py
 #### 2.1 Optimización de Hiperparámetros
 **Archivo:** `PSO_hyperparameter_tuning.py`
 
-Búsqueda de hiperparámetros óptimos para SVM (C y gamma).
+Búsqueda de hiperparámetros óptimos para SVM (C, gamma, epsilon, tol) usando validación cruzada.
 
 ```bash
 python PSO_hyperparameter_tuning.py
 ```
 
-#### 2.2 Optimización de Pesos Neuronales
-**Archivo:** `PSO_weights_optimization.py`
+| Parámetro | Rango | Descripción |
+|-----------|-------|-------------|
+| C | [0.1, 100] | Regularización |
+| gamma | [0.0001, 2.0] | Coeficiente kernel RBF |
+| epsilon | [0.01, 1.0] | Tolerancia en función de pérdida |
+| tol | [1e-5, 1e-1] | Tolerancia de convergencia |
 
-Entrenamiento de redes neuronales sin backpropagation - los pesos se optimizan directamente via PSO.
+#### 2.2 Optimización de Pesos Neuronales
+**Archivo:** `PSO_NN_training_without_backpropagation.py`
+
+Entrenamiento de redes neuronales sin backpropagation - los pesos se optimizan directamente via PSO usando PySwarms. Resuelve el problema CartPole-v1.
 
 ```bash
-python PSO_weights_optimization.py
+python PSO_NN_training_without_backpropagation.py
 ```
 
 #### 2.3 Clustering
@@ -55,10 +67,28 @@ python Swarm_clustering.py
 
 ---
 
+## Guía de Uso Rápida
+
+```bash
+# Clone el repositorio y navegue al directorio
+cd swarm_algorithms
+
+# Instale las dependencias
+pip install -r requirements.txt
+
+# Ejecute cualquier algoritmo directamente
+python PSO_hyperparameter_tuning.py      # Optimiza hiperparámetros SVM
+python ABC_feature_selection.py         # Selecciona features automáticamente
+python PSO_NN_training_without_backpropagation.py  # Entrena red neuronal
+python Swarm_clustering.py              # Clustering no supervisado
+```
+
+---
+
 ## Requisitos
 
 ```bash
-pip install numpy scikit-learn matplotlib scipy
+pip install numpy scikit-learn matplotlib scipy pyswarms gymnasium
 ```
 
 O si usas uv:
@@ -90,11 +120,11 @@ Donde:
 
 ## Comparativa Rápida
 
-| Algoritmo | Mejor para | Complexidad |
+| Algoritmo | Mejor para | Complejidad |
 |----------|-----------|------------|
 | ABC | Feature Selection | Media |
-| PSO (HPO) | Hiperparámetros | Baja |
-| PSO (Weights) | NN Training | Alta |
+| PSO (HPO 4 params) | Hiperparámetros SVM | Media |
+| PSO (NN) | CartPole RL | Alta |
 | PSO (Clustering) | Unsupervised | Media |
 
 
