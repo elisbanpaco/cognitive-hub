@@ -83,15 +83,7 @@ python PSO_NN_training_without_backpropagation.py  # Entrena red neuronal
 python Swarm_clustering.py              # Clustering no supervisado
 ```
 
----
-
-## Requisitos
-
-```bash
-pip install numpy scikit-learn matplotlib scipy pyswarms gymnasium
-```
-
-O si usas uv:
+Las dependencias se gestionan en `pyproject.toml`:
 ```bash
 uv sync
 ```
