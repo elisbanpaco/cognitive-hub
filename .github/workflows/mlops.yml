@@ -1,0 +1,69 @@
+name: MLOps Pipeline - Mood Predictor
+
+on:
+  push:
+    paths:
+      - 'ml_research/predictive_poc/**'
+      - '.github/workflows/mlops.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'ml_research/predictive_poc/**'
+
+jobs:
+  continuous-training:
+    runs-on: ubuntu-24.04
+
+    defaults:
+      run:
+        working-directory: ml_research/predictive_poc
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: "ml_research/predictive_poc/uv.lock"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Execute Continuous Training
+        run: uv run train.py
+
+      - name: Validate Model Quality Metrics
+        run: |
+          uv run python -c "
+          import json, sys
+          try:
+              with open('model_artifacts/metrics.json') as f:
+                  metrics = json.load(f)
+              accuracy = metrics.get('accuracy', 0)
+              print(f'Accuracy registrado: {accuracy:.4f}')
+              
+              if accuracy < 0.85:
+                  print('Error crítico: Degradación del modelo detectada (Accuracy < 0.85).')
+                  sys.exit(1)
+                  
+              print('Validación superada. Criterios de calidad cumplidos.')
+          except Exception as e:
+              print(f'Error al leer las métricas: {e}')
+              sys.exit(1)
+          "
+
+      - name: Archive Model Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mood-classifier-model
+          path: ml_research/predictive_poc/model_artifacts/
+          retention-days: 7
+          if-no-files-found: error

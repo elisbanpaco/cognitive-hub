@@ -1,0 +1,9 @@
+{
+    "accuracy": 0.9966666666666667,
+    "f1_score": 0.9966553162571121,
+    "best_params": {
+        "max_depth": null,
+        "min_samples_split": 2,
+        "n_estimators": 100
+    }
+}
