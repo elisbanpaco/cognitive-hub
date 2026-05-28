@@ -6,8 +6,8 @@ client/
 .github/
 
 # Bloquear entornos de desarrollo locales y cachés
-.venv/
-venv/
+**/.venv/
+**/venv/
 **/__pycache__/
 **/*.pyc
 **/*.pyo
