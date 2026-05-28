@@ -1,7 +1,6 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any
 from enum import Enum
-
 
 class AGType(str, Enum):
     FEATURE_SELECTION = "feature_selection"
@@ -37,3 +36,10 @@ class AGProgressMessage(BaseModel):
     history: Optional[List[Dict[str, Any]]] = None
     best_individual: Optional[Dict[str, Any]] = None
     message: Optional[str] = None
+
+
+class SongFeatures(BaseModel):
+    danceability: float = Field(..., ge=0.0, le=1.0, description="Capacidad de baile de la pista")
+    energy: float = Field(..., ge=0.0, le=1.0, description="Nivel de energía de la pista")
+    acousticness: float = Field(..., ge=0.0, le=1.0, description="Nivel de acústica de la pista")
+    tempo: float = Field(..., ge=60.0, le=180.0, description="Tempo en BPM")

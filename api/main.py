@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routes.AG import router as algoritmos_router
+from routes.predict import router as predict
 
 app = FastAPI(title="Applied NLP Engine", version="0.0.1")
 
@@ -18,6 +19,9 @@ app.add_middleware(
 
 
 app.include_router(algoritmos_router, prefix="/api/v1/AG", tags=["algoritmos geneticos"])
+
+
+app.include_router(predict, prefix="/api/v1/predict", tags=["Predictive Model"])
 
 @app.get("/")
 def read_root():
