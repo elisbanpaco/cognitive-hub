@@ -16,7 +16,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends build-essential && \
     rm -rf /var/lib/apt/lists/*
 
-# 4. Copiar SOLO los archivos de uv (¡Adiós requirements.txt!)
+# 4. Copiar dependencias de Python
 COPY api/pyproject.toml api/uv.lock* /workspace/api/
 
 WORKDIR /workspace/api
