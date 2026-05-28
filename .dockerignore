@@ -1,0 +1,26 @@
+# Bloquear la carga del frontend en la API
+client/
+
+# Bloquear directorios de Git y CI
+.git/
+.github/
+
+# Bloquear entornos de desarrollo locales y cachés
+.venv/
+venv/
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+.pytest_cache/
+
+# Bloquear datasets pesados y código de entrenamiento
+ml_research/data/
+ml_research/predictive_poc/.venv/
+ml_research/predictive_poc/train.py
+ml_research/predictive_poc/predict.py
+*.csv
+
+# Sistema Operativo y Editores
+.vscode/
+.idea/
+.DS_Store
