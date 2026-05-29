@@ -1,0 +1,38 @@
+name: Deploy Self-Hosted Environments
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  deploy:
+    runs-on: produccion-local # Llama a la etiqueta que le pusiste a tu PC
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Determinar Entorno y Variables
+        id: env-setup
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "ENV_NAME=production" >> $GITHUB_ENV
+            echo "API_PORT=8000" >> $GITHUB_ENV
+            echo "CLIENT_PORT=3000" >> $GITHUB_ENV
+            echo "PUBLIC_API_URL=https://api.tu-proyecto.com" >> $GITHUB_ENV
+            echo "PROJECT_NAME=cognitive-prod" >> $GITHUB_ENV
+          else
+            echo "ENV_NAME=development" >> $GITHUB_ENV
+            echo "API_PORT=8001" >> $GITHUB_ENV
+            echo "CLIENT_PORT=3001" >> $GITHUB_ENV
+            echo "PUBLIC_API_URL=https://api-dev.tu-proyecto.com" >> $GITHUB_ENV
+            echo "PROJECT_NAME=cognitive-dev" >> $GITHUB_ENV
+          fi
+
+      - name: Construir y Desplegar
+        run: |
+          # Despliegue usando el Project Name dinámico para separar dev y main
+          docker compose -p ${{ env.PROJECT_NAME }} build
+          docker compose -p ${{ env.PROJECT_NAME }} up -d
+          docker image prune -f
