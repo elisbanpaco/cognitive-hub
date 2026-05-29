@@ -109,11 +109,10 @@ X_scaled_temp = scaler_temp.fit_transform(X)
 selector = SelectKBest(mutual_info_classif, k=8)  # Selecciona las 8 mejores
 X_selected = selector.fit_transform(X_scaled_temp, y_encoded)
 
-# Obtener nombres de características seleccionadas
-selected_mask = selector.get_scores()
+# ✅ CORRECCIÓN: Obtener información de características seleccionadas
 selected_indices = selector.get_support(indices=True)
 selected_features = [feature_cols[i] for i in selected_indices]
-selected_scores = [selector.scores_[i] for i in selected_indices]
+selected_scores = selector.scores_[selected_indices]
 
 print(f"Características seleccionadas (8 mejores):")
 for feat, score in zip(selected_features, selected_scores):
@@ -122,7 +121,9 @@ for feat, score in zip(selected_features, selected_scores):
 # Mostrar características descartadas
 discarded = [feat for i, feat in enumerate(feature_cols) if i not in selected_indices]
 if discarded:
-    print(f"\nCaracterísticas descartadas: {discarded[:3]}...")
+    print(f"\nCaracterísticas descartadas: {discarded[:5]}")
+    if len(discarded) > 5:
+        print(f"  ... y {len(discarded)-5} más")
 
 # ============================================
 # 5. DIVISIÓN TRAIN/TEST
