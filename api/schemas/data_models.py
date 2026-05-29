@@ -14,13 +14,13 @@ class DatosAG(BaseModel):
 
 
 class DatosAGConfig(BaseModel):
-    population_size: Optional[int] = None
-    generations: Optional[int] = None
-    mutation_rate: Optional[float] = None
-    tournament_size: Optional[int] = None
-    max_layers: Optional[int] = None
-    max_neurons: Optional[int] = None
-    dataset: Optional[str] = "breast_cancer"
+    population_size: int = Field(default=20, ge=2, description="Tamaño de la población (mínimo 2)")
+    generations: int = Field(default=15, ge=1, description="Número de generaciones (mínimo 1)")
+    mutation_rate: float = Field(default=0.05, ge=0.0, le=1.0, description="Tasa de mutación (entre 0 y 1)")
+    tournament_size: int = Field(default=3, ge=2, description="Tamaño del torneo (mínimo 2)")
+    max_layers: int = Field(default=5, ge=1, description="Máximo de capas ocultas")
+    max_neurons: int = Field(default=128, ge=1, description="Máximo de neuronas por capa")
+    dataset: str = Field(default="breast_cancer", description="Nombre del dataset a utilizar")
 
 
 class AGProgressMessage(BaseModel):
