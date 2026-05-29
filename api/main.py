@@ -7,6 +7,8 @@ app = FastAPI(title="Applied NLP Engine", version="0.0.1")
 
 origins = [
     "http://localhost:3000",
+    "http://localhost:3001",
+    "https://holly-motors-bingo-academic.trycloudflare.com"
 ]
 # Configuración de CORS (Vital para que tu frontend se comunique)
 app.add_middleware(
