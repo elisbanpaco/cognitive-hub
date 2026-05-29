@@ -2,7 +2,10 @@ import { useState, useCallback } from "react";
 import { AlgorithmType, AGConfig, AGResult } from "./types";
 import { getDefaultConfig } from "./config";
 
-const baseUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/AG`  || 'https://dare-nurses-soundtrack-fine.trycloudflare.com/api/v1/AG';
+
+const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://dare-nurses-soundtrack-fine.trycloudflare.com';
+
+const baseUrl = `${apiUrl}/api/v1/AG`;
 
 export function useAG() {
   const [algorithm, setAlgorithm] = useState<AlgorithmType>("feature_selection");
