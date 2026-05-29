@@ -1,0 +1,118 @@
+{
+    "accuracy": 0.93,
+    "f1_score": 0.9343150409814415,
+    "precision": 0.940871826625387,
+    "recall": 0.93,
+    "best_cv_score": 0.9470824449277726,
+    "best_params": {
+        "n_estimators": 500,
+        "min_samples_split": 10,
+        "min_samples_leaf": 1,
+        "max_features": "log2",
+        "max_depth": null,
+        "class_weight": "balanced",
+        "bootstrap": true
+    },
+    "selected_features": [
+        "energy",
+        "acousticness",
+        "valence",
+        "energy_dance_ratio",
+        "valence_energy",
+        "energy_squared",
+        "happy_energy",
+        "sad_acoustic"
+    ],
+    "feature_importance": {
+        "energy": 0.13491817193569183,
+        "acousticness": 0.1653844917861483,
+        "valence": 0.1739068613748744,
+        "energy_dance_ratio": 0.07700251458899252,
+        "valence_energy": 0.11008808754417204,
+        "energy_squared": 0.15345163285343177,
+        "happy_energy": 0.05668059958942011,
+        "sad_acoustic": 0.12856764032726914
+    },
+    "confusion_matrix": [
+        [
+            332,
+            18,
+            0,
+            0,
+            1
+        ],
+        [
+            8,
+            25,
+            3,
+            0,
+            0
+        ],
+        [
+            0,
+            5,
+            54,
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            35,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            0,
+            19
+        ]
+    ],
+    "classification_report": {
+        "Chill": {
+            "precision": 0.9764705882352941,
+            "recall": 0.9458689458689459,
+            "f1-score": 0.9609261939218524,
+            "support": 351.0
+        },
+        "Energetic": {
+            "precision": 0.5208333333333334,
+            "recall": 0.6944444444444444,
+            "f1-score": 0.5952380952380952,
+            "support": 36.0
+        },
+        "Happy": {
+            "precision": 0.9473684210526315,
+            "recall": 0.9152542372881356,
+            "f1-score": 0.9310344827586207,
+            "support": 59.0
+        },
+        "Melancholic": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 35.0
+        },
+        "Sad": {
+            "precision": 0.95,
+            "recall": 1.0,
+            "f1-score": 0.9743589743589743,
+            "support": 19.0
+        },
+        "accuracy": 0.93,
+        "macro avg": {
+            "precision": 0.8789344685242518,
+            "recall": 0.9111135255203052,
+            "f1-score": 0.8923115492555086,
+            "support": 500.0
+        },
+        "weighted avg": {
+            "precision": 0.940871826625387,
+            "recall": 0.93,
+            "f1-score": 0.9343150409814415,
+            "support": 500.0
+        }
+    }
+}

@@ -1,0 +1,2 @@
+accuracy,f1_score,precision,recall,best_cv_score,n_features_selected,n_estimators,max_depth
+0.93,0.9343150409814415,0.940871826625387,0.93,0.9470824449277726,8,500,
