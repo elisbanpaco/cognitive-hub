@@ -73,7 +73,7 @@ out/
 # ML / DATA
 # ========================
 *.h5
-*.pkl
+# *.pkl
 *.pth
 models/
 checkpoints/
