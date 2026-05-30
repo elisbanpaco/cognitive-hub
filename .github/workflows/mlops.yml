@@ -8,8 +8,15 @@ on:
   pull_request:
     branches:
       - main
+      - develop
     paths:
       - 'ml_research/predictive_poc/**'
+
+# Permisos necesarios para que el bot de GitHub pueda escribir en los PRs
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
 
 jobs:
   continuous-training:
@@ -37,10 +44,53 @@ jobs:
       - name: Install dependencies
         run: uv sync
 
+      # NIVEL 1: Shift-Left (Análisis Estático)
+      # Bloquea el pipeline en 1 segundo si el código está sucio, ahorrando tiempo de cómputo
+      - name: Linter y Análisis Estático (Ruff)
+        run: |
+          uv pip install ruff
+          uv run ruff check .
+
       - name: Execute Continuous Training
         run: uv run train.py
 
-      - name: Validate Model Quality Metrics
+      # NIVEL 2: Continuous Machine Learning (CML)
+      # Escribe un reporte visual automáticamente solo cuando es un Pull Request
+      - name: Reporte de Métricas en el PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            // La acción corre desde la raíz del repositorio
+            const metricsPath = 'ml_research/predictive_poc/model_artifacts/metrics.json';
+            const metrics = JSON.parse(fs.readFileSync(metricsPath, 'utf8'));
+            const accuracy = (metrics.accuracy * 100).toFixed(2);
+            const f1 = (metrics.f1_score * 100).toFixed(2);
+            
+            const isApproved = metrics.accuracy >= 0.85;
+            const status = isApproved 
+              ? '✅ **ESTADO: APROBADO** (Cumple el criterio de calidad >85%)' 
+              : '❌ **ESTADO: RECHAZADO** (Degradación detectada. El pipeline fallará en el siguiente paso.)';
+            
+            const body = `## Reporte Automático de MLOps
+            **Modelo Predictivo de Mood Musical**
+            
+            - **Accuracy:** ${accuracy}%
+            - **F1-Score:** ${f1}%
+            
+            ${status}`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+      # Quality Gate: Fallo estricto si el modelo no sirve
+      - name: Validate Model Quality Metrics (Quality Gate)
         run: |
           uv run python -c "
           import json, sys

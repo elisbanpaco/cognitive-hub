@@ -24,7 +24,9 @@ export default function MoodPredictor() {
   const executeInference = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8000/api/v1/predict/mood', {
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://dare-nurses-soundtrack-fine.trycloudflare.com';
+      
+      const response = await fetch(`${baseUrl}/api/v1/predict/mood`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(features),

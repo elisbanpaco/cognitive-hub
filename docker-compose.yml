@@ -3,22 +3,22 @@ services:
     build:
       context: .
       dockerfile: api/Dockerfile
-    container_name: cognitive_hub_api
+    container_name: cognitive_hub_api_${ENV_NAME}
     ports:
-      - "8000:8000"
+      - "${API_PORT}:8000"
     environment:
-      - ENV=production
+      - ENV=${ENV_NAME}
     restart: unless-stopped
 
   client:
     build:
       context: ./client
       dockerfile: Dockerfile
-    container_name: cognitive_hub_client
+    container_name: cognitive_hub_client_${ENV_NAME}
     ports:
-      - "3000:3000"
+      - "${CLIENT_PORT}:3000"
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - NEXT_PUBLIC_API_URL=${PUBLIC_API_URL}
     depends_on:
       - api
     restart: unless-stopped
