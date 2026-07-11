@@ -1,107 +1,74 @@
 <div align="center">
-  <h1>🧠 Aprendizaje No Supervisado y Reducción de Dimensiones</h1>
-  <p>
-    <strong>Investigación en Machine Learning — Cognitive Hub</strong>
-  </p>
-
-  [![Python Version](https://img.shields.io/badge/python-%3E%3D3.13-blue.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/downloads/)
-  [![Jupyter](https://img.shields.io/badge/Jupyter-F37626.svg?style=for-the-badge&logo=Jupyter&logoColor=white)](https://jupyter.org/)
-  [![uv](https://img.shields.io/badge/uv-Fast%20Python%20Package%20Manager-purple.svg?style=for-the-badge)](https://github.com/astral-sh/uv)
-  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+  <img src="https://img.shields.io/badge/Course_Nivel-Intermedio-F37626?style=for-the-badge" alt="Nivel Intermedio" />
+  <h1>📚 Aprendizaje No Supervisado y Reducción de Dimensiones</h1>
+  <p><strong>De los datos crudos a los patrones ocultos: Un enfoque práctico e intuitivo.</strong></p>
 </div>
 
 ---
 
-Bienvenido al módulo de **Aprendizaje No Supervisado y Reducción de Dimensiones**. Este proyecto forma parte del ecosistema de investigación del **Cognitive Hub**, enfocado en la exploración matemática y algorítmica de conjuntos de datos no etiquetados. Aquí aplicamos técnicas de vanguardia para descubrir patrones ocultos, extraer características esenciales y reducir la dimensionalidad de los datos.
+¡Hola y bienvenido a este módulo de Machine Learning! 👋🏼 
 
-## 📑 Índice
+A diferencia del aprendizaje supervisado, donde le damos a nuestro modelo las respuestas correctas por adelantado, en el **Aprendizaje No Supervisado** somos verdaderos exploradores. Aquí, los datos no tienen etiquetas. Nuestro objetivo es dejar que los algoritmos descubran la estructura subyacente, encuentren grupos naturales y simplifiquen la información sin perder su esencia.
 
-- [Objetivos del Proyecto](#-objetivos-del-proyecto)
-- [Arquitectura del Repositorio](#-arquitectura-del-repositorio)
-- [Guía de Inicio Rápido](#-guía-de-inicio-rápido)
-- [Stack Tecnológico](#-stack-tecnológico)
-- [Cómo Contribuir](#-cómo-contribuir)
-- [Licencia](#-licencia)
+Si alguna vez te has preguntado cómo Netflix agrupa perfiles de usuarios similares o cómo los biólogos clasifican secuencias genéticas, estás en el lugar correcto.
 
-## 📌 Objetivos del Proyecto
+## 🎯 ¿Qué logramos en este módulo? (Resultados Prácticos)
 
-Nuestro enfoque se centra en tres pilares fundamentales:
-1. **Descubrimiento de Conocimiento (Clustering):** Agrupar datos complejos basándonos en sus similitudes intrínsecas, sin depender de etiquetas predefinidas.
-2. **Reducción de Dimensionalidad:** Mitigar la *maldición de la dimensionalidad* extrayendo los componentes que capturan la mayor varianza, facilitando el procesamiento y reduciendo el costo computacional.
-3. **Interpretación y Visualización:** Proyectar espacios multidimensionales en 2D y 3D para la toma de decisiones informada.
+En este laboratorio, hemos implementado y documentado flujos de trabajo analíticos de principio a fin. Concretamente, en esta investigación se logró:
+- **Agrupación Jerárquica de Datos:** Modelamos la similitud matemática entre observaciones sin requerir etiquetas previas, construyendo dendrogramas que revelan la jerarquía natural de los conjuntos de datos.
+- **Reducción de Dimensionalidad Espacial:** Comprimimos datos altamente complejos (con docenas de variables) a 2 o 3 componentes principales mediante PCA, logrando retener la varianza original para facilitar su visualización e interpretación.
+- **Extracción de Características (Factorización):** Aplicamos matrices no negativas (NMF) para descomponer datos no estructurados en sus partes más puras y fundamentales.
+- **Ingeniería Analítica en Python:** Estructuramos todo el pipeline de manera reproducible, utilizando buenas prácticas de código apoyándonos en el ecosistema de **Scikit-Learn, Pandas y NumPy**.
 
-## 📂 Arquitectura del Repositorio
+## 🗂️ Tu Plan de Estudio (Los Cuadernos)
 
-El flujo de trabajo e investigación está estructurado en una serie de Notebooks iterativos. Cada uno contiene teoría, implementación matemática y visualizaciones.
+Hemos diseñado este repositorio con una filosofía educativa. Cada Notebook es una "lección" completa con teoría explicada de forma sencilla, código ejecutable, e interpretaciones paso a paso.
 
-| Notebook | Descripción | Algoritmos Clave |
-| :--- | :--- | :--- |
-| 📓 [`clustering-jerarquico.ipynb`](./clustering-jerarquico.ipynb) | Análisis de similitud y jerarquías en los datos. Incluye la generación e interpretación de dendrogramas. | *Clustering Aglomerativo, Enlaces (Ward, Complete, Average)* |
-| 📓 [`transformacion-PCA.ipynb`](./transformacion-PCA.ipynb) | Compresión de características y reducción espacial. Evaluación de la varianza explicada y visualización de componentes principales. | *PCA, SVD (Descomposición en Valores Singulares)* |
-| 📓 [`factorizacion_matriz_no_negativa_NMF.ipynb`](./factorizacion_matriz_no_negativa_NMF.ipynb) | Extracción de partes constituyentes de los datos. Ideal para procesamiento de imágenes, señales y modelado de temas en NLP. | *NMF (Non-Negative Matrix Factorization)* |
+| Módulo | Tema Principal | Algoritmos que Dominarás | ¿Para qué sirve en la vida real? |
+|:---|:---|:---|:---|
+| 📓 [**Módulo 1:**<br>Clustering Jerárquico](./clustering_jerarquico.ipynb) | Descubrir familias en los datos construyendo árboles de decisión (Dendrogramas). | *Clustering Aglomerativo* | Segmentar clientes en marketing según sus hábitos de compra, creando nichos específicos. |
+| 📓 [**Módulo 2:**<br>Análisis de Componentes Principales](./transformacion_PCA.ipynb) | Reducir el "ruido" y las columnas redundantes de tus datos maximizando la varianza. | *PCA (Principal Component Analysis)* | Comprimir datos financieros masivos para visualizarlos en 2D o 3D sin perder las tendencias. |
+| 📓 [**Módulo 3:**<br>Factorización No Negativa](./factorizacion_matriz_no_negativa_NMF.ipynb) | Descomponer datos complejos en sus partes más básicas y fundamentales. | *NMF (Non-Negative Matrix Factorization)* | Extraer temas principales de miles de artículos de noticias simultáneamente. |
 
-## 🚀 Guía de Inicio Rápido
+## ⚙️ Configura tu Entorno de Trabajo (Laboratorio)
 
-El proyecto está diseñado para ser reproducible y rápido de configurar utilizando [`uv`](https://github.com/astral-sh/uv), el gestor de paquetes de nueva generación para Python.
+Para que puedas ejecutar los cuadernos en tu computadora exactamente como lo haríamos en un laboratorio, utilizamos [`uv`](https://github.com/astral-sh/uv), una herramienta ultrarrápida que instala todo lo que necesitas en segundos.
 
-### Requisitos Previos
-- Python 3.13 o superior.
-- Git.
+Sigue estos pasos en tu terminal:
 
-### Instalación Paso a Paso
-
-**1. Clonar el repositorio localmente:**
+**1. Descarga los materiales:**
 ```bash
 git clone https://github.com/elisbanpaco/cognitive-hub.git
 cd cognitive-hub/ml_research/Aprendizaje-no-supervisado-reduccion-dimensiones
 ```
 
-**2. Sincronizar el entorno:**
-Este comando creará automáticamente un entorno virtual aislado (`.venv`) e instalará las versiones exactas estipuladas en el archivo `uv.lock`.
+**2. Instala las librerías necesarias:**
 ```bash
+# uv leerá el archivo pyproject.toml e instalará mágicamente Pandas, Scikit-Learn, Matplotlib, etc.
 uv sync
 ```
 
-**3. Activar el entorno virtual:**
-- **Sistemas Unix (Linux/macOS):**
-  ```bash
-  source .venv/bin/activate
-  ```
-- **Windows:**
-  ```bash
-  .venv\Scripts\activate
-  ```
+**3. Activa tu entorno de laboratorio:**
+- **En Mac/Linux:** `source .venv/bin/activate`
+- **En Windows:** `.venv\Scripts\activate`
 
-**4. Levantar el entorno de Jupyter:**
+**4. ¡Abre Jupyter y empieza a aprender!**
 ```bash
 jupyter notebook
 ```
 
-## 🛠️ Stack Tecnológico
+## 🧠 Prerrequisitos
 
-El proyecto se apoya en un ecosistema robusto de ciencia de datos:
+Para aprovechar al máximo este módulo sin frustrarte, te recomendamos estar familiarizado con:
+- Sintaxis básica de **Python**.
+- Manipulación de tablas con **Pandas** y operaciones matemáticas con **NumPy**.
+- Conceptos básicos de álgebra lineal (como qué es una matriz y un vector).
 
-- **[Scikit-Learn (>=1.9.0)](https://scikit-learn.org/):** El núcleo de nuestros modelos de Machine Learning.
-- **[NumPy (>=2.5.1)](https://numpy.org/) & [Pandas (>=3.0.3)](https://pandas.pydata.org/):** Para manipulación de matrices, tensores y estructuras de datos.
-- **[Matplotlib (>=3.11.0)](https://matplotlib.org/):** Para renderizado de proyecciones y gráficos de alta calidad.
-- **Gestión de Entorno:** [uv](https://docs.astral.sh/uv/) y configuración centralizada vía `pyproject.toml`.
+## 🏆 Proyecto Abierto (Práctica Extra)
 
-## 🤝 Cómo Contribuir
+El aprendizaje nunca se detiene. Si completaste los cuadernos y quieres un desafío extra, ¡te invitamos a colaborar en este repositorio! 
 
-Fomentamos la colaboración y el crecimiento continuo. Si tienes ideas para nuevos algoritmos (ej. *t-SNE*, *UMAP*, *DBSCAN*), o quieres optimizar los actuales:
+¿Por qué no intentas investigar e implementar otros algoritmos como **K-Means**, **DBSCAN** o **t-SNE**?
+Haz un *fork* del repositorio, crea tu propio Notebook con el mismo estilo explicativo y envíanos un *Pull Request*. Estaremos encantados de revisar tu código y agregarlo al plan de estudio.
 
-1. Realiza un **Fork** de este repositorio.
-2. Crea una rama descriptiva: `git checkout -b feature/nombre-algoritmo`.
-3. Documenta tu código y asegúrate de que los notebooks incluyan celdas explicativas.
-4. Confirma tus cambios: `git commit -m 'feat: Añadida implementación de t-SNE'`.
-5. Haz push a tu fork: `git push origin feature/nombre-algoritmo`.
-6. Abre un **Pull Request** para iniciar el proceso de revisión.
-
-## 📜 Licencia
-
-Este proyecto se distribuye bajo la **Licencia MIT**. Siéntete libre de utilizar, modificar y distribuir el código con fines académicos o comerciales. Consulta el archivo `LICENSE` para más detalles.
-
----
-<div align="center">
-  <sub>Desarrollado con ❤️ por la comunidad del Cognitive Hub.</sub>
-</div>
+¡Feliz aprendizaje y que disfrutes descubriendo patrones! 🚀
